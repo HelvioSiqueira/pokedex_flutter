@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:pokedex_flutter/models/pokemon_item.dart';
 import 'pokemon_list_item.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,30 +23,21 @@ class PokemonList with ChangeNotifier {
 
     results.forEach((pokemon) {
       _pokelist
-          .add(PokemonListItem(name: pokemon["name"], url: pokemon["url"]));
+          .add(PokemonListItem.fromMap(pokemon));
     });
 
     notifyListeners();
   }
 
-  Future<List<String>> getPokemon(String pokemonUrl) async {
-    List<String> types = [];
+  Future<PokemonItem> getPokemon(String pokemonUrl) async {
 
     final response = await http.get(Uri.parse(pokemonUrl));
 
     Map<String, dynamic> data = jsonDecode(response.body);
 
-    List<dynamic> typeList = data["types"];
-
-    typeList.forEach((element) {
-      var type = element["type"];
-      types.add(type["name"]);
-    });
-
-    print(types);
-
     notifyListeners();
 
-    return types;
+    return PokemonItem.fromMap(data);
   }
+
 }

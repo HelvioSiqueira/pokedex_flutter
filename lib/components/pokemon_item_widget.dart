@@ -11,16 +11,26 @@ class PokemonItemWidget extends StatelessWidget {
     return Card(
         child: ListTile(
       leading: Image.network(pokeListItem.imageUrl),
-      title: Text(
-          "${pokeListItem.name[0].toUpperCase()}${pokeListItem.name.substring(1, pokeListItem.name.length)}"),
+      title: Text(pokeListItem.name.capitalize()),
       subtitle: Row(
         children: pokeListItem.types.map((type) {
           return Container(
             padding: const EdgeInsets.all(8),
-            child: Text(type),
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8), color: Colors.amber),
+              child: Text(type.capitalize()),
+            ),
           );
         }).toList(),
       ),
     ));
+  }
+}
+
+extension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1, length)}";
   }
 }

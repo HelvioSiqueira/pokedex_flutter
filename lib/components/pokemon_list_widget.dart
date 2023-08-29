@@ -19,8 +19,10 @@ class PokemonListWidget extends StatelessWidget {
           var pokeitem = pokelist[index];
 
           if (pokeitem.types.isEmpty) {
-            provider.getPokemon(pokeitem.url).then((value){
-              pokeitem.types = value;
+            provider.getPokemon(pokeitem.url).then((value) {
+              pokeitem.types = value.types
+                  .expand((element) => element.types.map((e) => e.name))
+                  .toList();
             });
           }
 
