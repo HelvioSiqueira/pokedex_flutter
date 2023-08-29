@@ -28,4 +28,24 @@ class PokemonList with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<List<String>> getPokemon(String pokemonUrl) async {
+    List<String> types = [];
+
+    final response = await http.get(Uri.parse(pokemonUrl));
+
+    Map<String, dynamic> data = jsonDecode(response.body);
+
+    List<dynamic> typeList = data["types"];
+
+    typeList.forEach((element) {
+      var type = element["type"];
+      types.add(type["name"]);
+    });
+
+    print(types);
+
+    notifyListeners();
+
+    return types;
+  }
 }

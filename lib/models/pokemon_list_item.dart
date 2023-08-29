@@ -1,11 +1,12 @@
 class PokemonListItem {
   PokemonListItem({
     required this.name,
-    required this.url,
+    required this.url
   });
 
   String name;
   String url;
+  List<String> types = [];
 
   String get imageUrl =>
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${url.split("/")[6]}.png";

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex_flutter/components/pokemon_item_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../models/pokemon_list.dart';
@@ -9,21 +10,21 @@ class PokemonListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<PokemonListItem> pokelist =
-        Provider.of<PokemonList>(context).pokelist;
+    var provider = Provider.of<PokemonList>(context);
+    List<PokemonListItem> pokelist = provider.pokelist;
 
-    return Container(
-      child: ListView.builder(
-          itemCount: pokelist.length,
-          itemBuilder: (context, index) {
-            return Card(
-              child: ListTile(
-                leading: Image.network(pokelist[index].imageUrl),
-                title: Text(
-                    "${pokelist[index].name[0].toUpperCase()}${pokelist[index].name.substring(1, pokelist[index].name.length)}"),
-              ),
-            );
-          }),
-    );
+    return ListView.builder(
+        itemCount: pokelist.length,
+        itemBuilder: (context, index) {
+          var pokeitem = pokelist[index];
+
+          if (pokeitem.types.isEmpty) {
+            provider.getPokemon(pokeitem.url).then((value){
+              pokeitem.types = value;
+            });
+          }
+
+          return PokemonItemWidget(pokeListItem: pokeitem);
+        });
   }
 }
