@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pokedex_flutter/components/pokemon_item_widget.dart';
 import 'package:provider/provider.dart';
 
-import '../models/pokemon_list.dart';
+import '../poviders/pokemon_list.dart';
 import '../models/pokemon_list_item.dart';
 
 class PokemonListWidget extends StatelessWidget {

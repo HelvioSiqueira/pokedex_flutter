@@ -34,15 +34,21 @@ class TypeWidget extends StatelessWidget {
           0.5,
           0.5
         ], tileMode: TileMode.repeated));
+      case "flying":
+        boxDecoration = boxDecoration.copyWith(
+            gradient: const SweepGradient(colors: [
+              Color.fromRGBO(240, 23, 87, 1),
+              Color.fromRGBO(65, 164, 12, 1)
+            ], stops: [
+              0.5,
+              0.5
+            ], tileMode: TileMode.repeated));
       case "normal":
         boxDecoration = boxDecoration.copyWith(
             color: const Color.fromRGBO(165, 173, 175, 1));
       case "bug":
         boxDecoration = boxDecoration.copyWith(
             color: const Color.fromRGBO(114, 159, 62, 1));
-      case "fighting":
-        boxDecoration = boxDecoration.copyWith(
-            color: const Color.fromRGBO(213, 102, 36, 1));
       case "poison":
         boxDecoration = boxDecoration.copyWith(
             color: const Color.fromRGBO(186, 126, 201, 1));

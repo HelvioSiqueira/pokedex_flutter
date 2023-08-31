@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:pokedex_flutter/models/pokemon_item.dart';
-import 'pokemon_list_item.dart';
+import '../models/pokemon_list_item.dart';
 import 'package:http/http.dart' as http;
 
 class PokemonList with ChangeNotifier {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex_flutter/components/pokemon_list_widget.dart';
-import 'package:pokedex_flutter/models/pokemon_list.dart';
+import 'package:pokedex_flutter/poviders/pokemon_list.dart';
 import 'package:provider/provider.dart';
 
 class PokemonListPage extends StatefulWidget {

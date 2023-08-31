@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex_flutter/models/pokemon_list.dart';
+import 'package:pokedex_flutter/poviders/pokemon_list.dart';
 import 'package:pokedex_flutter/pages/pokemon_list_page.dart';
 import 'package:pokedex_flutter/utils/app_routes.dart';
 import 'package:provider/provider.dart';
