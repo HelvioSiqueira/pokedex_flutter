@@ -21,10 +21,10 @@ class PokemonList with ChangeNotifier {
 
     List<dynamic> results = data["results"];
 
-    results.forEach((pokemon) {
+    for (var pokemon in results) {
       _pokelist
           .add(PokemonListItem.fromMap(pokemon));
-    });
+    }
 
     notifyListeners();
   }
