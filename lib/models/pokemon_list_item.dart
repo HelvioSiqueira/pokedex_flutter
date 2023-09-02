@@ -9,6 +9,7 @@ class PokemonListItem {
 
   String get imageUrl =>
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${url.split("/")[6]}.png";
+  String get number => url.split("/")[6];
 
   factory PokemonListItem.fromMap(Map<String, dynamic> map) {
     return PokemonListItem(name: map["name"], url: map["url"]);

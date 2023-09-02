@@ -1,18 +1,23 @@
 import 'dart:convert';
 
+import 'package:pokedex_flutter/models/type_pokemon.dart';
+import 'package:pokedex_flutter/models/stats_pokemon.dart';
+
 class PokemonItem {
   PokemonItem(
       {required this.id,
       required this.name,
       required this.height,
       required this.weight,
-      required this.types});
+      required this.types,
+      required this.pokemonStats});
 
   int id;
   String name;
   int height;
   int weight;
   List<Types> types;
+  Stats pokemonStats;
 
   factory PokemonItem.fromMap(Map<String, dynamic> map) {
     return PokemonItem(
@@ -20,42 +25,11 @@ class PokemonItem {
         name: map["name"],
         height: map["height"],
         weight: map["weight"],
-        types: [Types.fromMap(map["types"])]);
+        types: [Types.fromMap(map["types"])],
+        pokemonStats: Stats.fromMap(map["stats"]));
   }
 
   factory PokemonItem.fromJson(String json) {
     return PokemonItem.fromMap(jsonDecode(json));
   }
-}
-
-class Types {
-  Types({required this.types});
-
-  List<Type> types;
-
-  factory Types.fromMap(List<dynamic> list) {
-    List<Type> typesToReturn = [];
-
-    for (var element in list) {
-      typesToReturn.add(Type.fromMap(element));
-    }
-
-    return Types(types: typesToReturn);
-  }
-
-  factory Types.fromJson(String json) => Types.fromMap(jsonDecode(json));
-}
-
-class Type {
-  Type({required this.name});
-
-  String name;
-
-  factory Type.fromMap(Map<String, dynamic> map) {
-    var type = map["type"];
-
-    return Type(name: type["name"]);
-  }
-
-  factory Type.fromJson(String json) => Type.fromJson(jsonDecode(json));
 }

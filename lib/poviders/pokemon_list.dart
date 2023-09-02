@@ -39,5 +39,4 @@ class PokemonList with ChangeNotifier {
 
     return PokemonItem.fromMap(data);
   }
-
 }
