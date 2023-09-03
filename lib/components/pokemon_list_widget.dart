@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:pokedex_flutter/components/pokemon_item_widget.dart';
 import 'package:provider/provider.dart';
@@ -12,21 +14,41 @@ class PokemonListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var provider = Provider.of<PokemonList>(context);
     List<PokemonListItem> pokelist = provider.pokelist;
+    String error = provider.errorPokemonList;
 
-    return ListView.builder(
-        itemCount: pokelist.length,
-        itemBuilder: (context, index) {
-          var pokeitem = pokelist[index];
+    return error == ""
+        ? ListView.builder(
+            itemCount: pokelist.length,
+            itemBuilder: (context, index) {
+              var pokeitem = pokelist[index];
 
-          if (pokeitem.types.isEmpty) {
-            provider.getPokemon(pokeitem.url).then((value) {
-              pokeitem.types = value.types
-                  .expand((element) => element.types.map((e) => e.name))
-                  .toList();
-            });
-          }
-
-          return PokemonItemWidget(pokeListItem: pokeitem);
-        });
+              if (pokeitem.types.isEmpty) {
+                provider.getPokemon(pokeitem.url).then((value) {
+                  if (value != null) {
+                    pokeitem.types = value.types
+                        .expand((element) => element.types.map((e) => e.name))
+                        .toList();
+                  }
+                });
+              }
+              return PokemonItemWidget(pokeListItem: pokeitem);
+            })
+        : AlertDialog(
+            title: const Text("Algo aconteceu"),
+            content: Text(error),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    exit(0);
+                  },
+                  child: const Text("Sair")),
+              TextButton(
+                  onPressed: () {
+                    Provider.of<PokemonList>(context, listen: false)
+                        .getPokemonList();
+                  },
+                  child: const Text("Tentar novamente"))
+            ],
+          );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:pokedex_flutter/data/repository/api_repository.dart';
 import 'package:pokedex_flutter/models/pokemon_item.dart';
+import '../utils/results.dart';
 
 import '../models/pokemon_list_item.dart';
 
@@ -11,29 +12,54 @@ class PokemonList with ChangeNotifier {
 
   List<PokemonListItem> get pokelist => [..._pokelist];
 
+  String errorPokemonList = "";
+
   Future<void> getPokemonList() async {
     _pokelist.clear();
 
-    var body = await ApiRepository.getPokemonListBody();
+    var result = await ApiRepository.getPokemonListBody();
 
-    Map<String, dynamic> data = jsonDecode(body);
+    final value = switch (result) {
+      Success(value: final data) => data.toString(),
+      Failure(exception: final exception) => exception
+    };
 
-    List<dynamic> results = data["results"];
+    if (value is String) {
+      Map<String, dynamic> data = jsonDecode(value);
 
-    for (var pokemon in results) {
-      _pokelist.add(PokemonListItem.fromMap(pokemon));
+      List<dynamic> results = data["results"];
+
+      for (var pokemon in results) {
+        _pokelist.add(PokemonListItem.fromMap(pokemon));
+      }
+    } else if (value is Exception) {
+      errorPokemonList = "Deu erro pra pegar a lista de pokemon, meu brother";
     }
 
     notifyListeners();
   }
 
-  Future<PokemonItem> getPokemon(String pokemonUrl) async {
-    var body = await ApiRepository.getPokemonBody(pokemonUrl);
+  Future<PokemonItem?> getPokemon(String pokemonUrl) async {
+    var result = await ApiRepository.getPokemonBody(pokemonUrl);
 
-    Map<String, dynamic> data = jsonDecode(body);
+    final value = switch (result) {
+      Success(value: final data) => data.toString(),
+      Failure(exception: final exception) => exception
+    };
 
-    notifyListeners();
+    if (value is String) {
+      Map<String, dynamic> data = jsonDecode(value);
 
-    return PokemonItem.fromMap(data);
+      notifyListeners();
+
+      return PokemonItem.fromMap(data);
+    } else if (value is Exception) {
+      errorPokemonList = "Deu erro pra obter o pokemon, meu brother";
+
+      notifyListeners();
+      return null;
+    } else {
+      return null;
+    }
   }
 }

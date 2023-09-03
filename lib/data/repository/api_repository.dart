@@ -1,25 +1,29 @@
 import 'package:http/http.dart' as http;
 
 import '../../utils/constants.dart';
+import '../../utils/results.dart';
 
 class ApiRepository {
-  static Future getPokemonListBody() async {
+  static Future<Result<String, Exception>> getPokemonListBody() async {
     final response = await http.get(Uri.parse(url));
 
-    if (response.statusCode == 200) {
-      return response.body;
-    } else {
-      return {};
+    switch (response.statusCode) {
+      case 200:
+        return Success(response.body);
+      default:
+        return Failure(Exception(response.reasonPhrase));
     }
   }
 
-  static Future getPokemonBody(String pokemonUrl) async {
+  static Future<Result<String, Exception>> getPokemonBody(
+      String pokemonUrl) async {
     final response = await http.get(Uri.parse(pokemonUrl));
 
-    if (response.statusCode == 200) {
-      return response.body;
-    } else {
-      return {};
+    switch (response.statusCode) {
+      case 200:
+        return Success(response.body);
+      default:
+        return Failure(Exception(response.reasonPhrase));
     }
   }
 }
