@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:pokedex_flutter/data/repository/api_repository.dart';
+import 'package:pokedex_flutter/data/remote/api_repository.dart';
 import 'package:pokedex_flutter/models/pokemon_item.dart';
 import '../utils/results.dart';
 

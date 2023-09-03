@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:pokedex_flutter/components/pokemon_item_widget.dart';
+import 'package:pokedex_flutter/data/local/database_repository.dart';
 import 'package:provider/provider.dart';
 
 import '../poviders/pokemon_list.dart';
@@ -25,9 +26,10 @@ class PokemonListWidget extends StatelessWidget {
               if (pokeitem.types.isEmpty) {
                 provider.getPokemon(pokeitem.url).then((value) {
                   if (value != null) {
-                    pokeitem.types = value.types
-                        .expand((element) => element.types.map((e) => e.name))
-                        .toList();
+
+                    DatabaseRepository.insertPokemon(value);
+
+                    pokeitem.types = value.types.typeList;
                   }
                 });
               }

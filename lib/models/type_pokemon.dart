@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 class Types {
-  Types({required this.types});
+  Types({required this.typeList});
 
-  List<Type> types;
+  List<String> typeList;
 
   factory Types.fromMap(List<dynamic> list) {
     List<Type> typesToReturn = [];
@@ -12,7 +12,7 @@ class Types {
       typesToReturn.add(Type.fromMap(element));
     }
 
-    return Types(types: typesToReturn);
+    return Types(typeList: typesToReturn.map((type) => type.name).toList());
   }
 
   factory Types.fromJson(String json) => Types.fromMap(jsonDecode(json));
