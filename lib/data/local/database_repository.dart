@@ -10,46 +10,33 @@ class DatabaseRepository {
     final dbPath = await getDatabasesPath();
 
     return openDatabase(path.join(dbPath, "pokemon.db"), version: 1,
-        onCreate: (db, version) {
-      return db.execute("CREATE TABLE pokemon (id INTEGER PRIMARY KEY,"
-          " name TEXT,"
-          " height INTEGER,"
-          " weight INTEGER,"
-          " types INTEGER,"
-          " stats INTEGER)");
-    });
-  }
+        onCreate: (db, version) async {
+      await db
+          .execute("CREATE TABLE IF NOT EXISTS pokemon (id INTEGER PRIMARY KEY,"
+              " name TEXT,"
+              " height INTEGER,"
+              " weight INTEGER,"
+              " types INTEGER,"
+              " stats INTEGER)");
 
-  static Future<Database> databaseStats() async {
-    final dbPath = await getDatabasesPath();
+      await db.execute(
+          "CREATE TABLE IF NOT EXISTS stats (id INTEGER PRIMARY KEY AUTOINCREMENT,"
+          " hp INTEGER,"
+          " attack INTEGER,"
+          " defense INTEGER,"
+          " specialattack INTEGER,"
+          " specialdefense INTEGER,"
+          " speed INTEGER)");
 
-    return openDatabase(path.join(dbPath, "stats.db"), version: 1,
-        onCreate: (db, version) {
-      return db
-          .execute("CREATE TABLE stats (id INTEGER PRIMARY KEY AUTOINCREMENT,"
-              " hp INTEGER,"
-              " attack INTEGER,"
-              " defense INTEGER,"
-              " specialattack INTEGER,"
-              " specialdefense INTEGER,"
-              " speed INTEGER)");
-    });
-  }
-
-  static Future<Database> databaseTypes() async {
-    final dbPath = await getDatabasesPath();
-
-    return openDatabase(path.join(dbPath, "types.db"), version: 1,
-        onCreate: (db, version) {
-      return db
-          .execute("CREATE TABLE types (id INTEGER PRIMARY KEY AUTOINCREMENT,"
-              "firstType TEXT,"
-              "secondType TEXT)");
+      await db.execute(
+          "CREATE TABLE IF NOT EXISTS types (id INTEGER PRIMARY KEY AUTOINCREMENT,"
+          "firstType TEXT,"
+          "secondType TEXT)");
     });
   }
 
   static Future<int> insertTypes(Types types) async {
-    final dbTypes = await DatabaseRepository.databaseTypes();
+    final dbTypes = await DatabaseRepository.dataBasePokemon();
 
     var values = {
       "firstType": types.typeList.elementAtOrNull(0),
@@ -60,7 +47,7 @@ class DatabaseRepository {
   }
 
   static Future<List<String>> getTypes(int id) async {
-    final dbTypes = await DatabaseRepository.databaseTypes();
+    final dbTypes = await DatabaseRepository.dataBasePokemon();
 
     var mapTypes =
         await dbTypes.query("types", where: "id = ?", whereArgs: [id]);
@@ -78,7 +65,7 @@ class DatabaseRepository {
   }
 
   static Future<int> insertStats(Stats stats) async {
-    final dbStats = await DatabaseRepository.databaseStats();
+    final dbStats = await DatabaseRepository.dataBasePokemon();
 
     Map<String, dynamic> values = {};
 
@@ -95,7 +82,7 @@ class DatabaseRepository {
   }
 
   static Future<Stats> getStats(int id) async {
-    final dbStats = await DatabaseRepository.databaseStats();
+    final dbStats = await DatabaseRepository.dataBasePokemon();
 
     var mapStats =
         await dbStats.query("stats", where: "id = ?", whereArgs: [id]);
