@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
                 seedColor: Colors.orangeAccent,
                 primary: Colors.orangeAccent,
                 secondary: Colors.redAccent),
+            iconTheme: const IconThemeData(color: Colors.orangeAccent),
             appBarTheme: const AppBarTheme(
                 color: Colors.orangeAccent,
                 titleTextStyle: TextStyle(

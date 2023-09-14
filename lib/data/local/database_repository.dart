@@ -17,7 +17,9 @@ class DatabaseRepository {
               " height INTEGER,"
               " weight INTEGER,"
               " types INTEGER,"
-              " stats INTEGER)");
+              " stats INTEGER,"
+              " isFavorite TEXT,"
+              " imageUrl TEXT)");
 
       await db.execute(
           "CREATE TABLE IF NOT EXISTS stats (id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -43,7 +45,8 @@ class DatabaseRepository {
       "secondType": types.typeList.elementAtOrNull(1) ?? ""
     };
 
-    return await dbTypes.insert("types", values);
+    return await dbTypes.insert("types", values,
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   static Future<List<String>> getTypes(int id) async {
@@ -115,15 +118,29 @@ class DatabaseRepository {
       "weight": pokemonItem.weight,
       "height": pokemonItem.height,
       "types": await insertTypes(pokemonItem.types),
-      "stats": await insertStats(pokemonItem.pokemonStats)
+      "stats": await insertStats(pokemonItem.pokemonStats),
+      "isFavorite": pokemonItem.isFavorite.toString(),
+      "imageUrl": pokemonItem.imageUrl
     };
 
     dbPokemon.insert("pokemon", values,
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  static Future<List<Map<String, dynamic>>> getAllPokemon() async {
+  static Future<List<PokemonItem>> getAllPokemon() async {
     final dbPokemon = await DatabaseRepository.dataBasePokemon();
-    return dbPokemon.query("pokemon");
+
+    var recs = await dbPokemon.query("pokemon");
+
+    return recs.map((pokemon) => PokemonItem.fromMap(pokemon)).toList();
+  }
+
+  static Future<PokemonItem> getPokemonById(String pokemonId) async {
+    final dbPokemon = await DatabaseRepository.dataBasePokemon();
+
+    var recs = await dbPokemon
+        .rawQuery("SELECT * FROM pokemon WHERE id = ?", [pokemonId]);
+
+    return PokemonItem.fromMap(recs.first);
   }
 }

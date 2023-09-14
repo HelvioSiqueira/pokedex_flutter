@@ -9,6 +9,11 @@ class Stats {
       Stats(listStats: map.map((e) => StatsItem.fromMap(e)).toList());
 
   factory Stats.fromJson(String json) => Stats.fromJson(jsonDecode(json));
+
+  @override
+  String toString() {
+    return listStats.map((e) => e.toString()).toString();
+  }
 }
 
 class StatsItem {

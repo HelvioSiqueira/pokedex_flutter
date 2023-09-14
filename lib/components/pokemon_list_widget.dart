@@ -27,7 +27,10 @@ class PokemonListWidget extends StatelessWidget {
                 provider.getPokemon(pokeitem.url).then((value) {
                   if (value != null) {
 
-                    DatabaseRepository.insertPokemon(value);
+                    var receivedPokemon = value;
+                    receivedPokemon.imageUrl = pokeitem.imageUrl;
+
+                    DatabaseRepository.insertPokemon(receivedPokemon);
 
                     pokeitem.types = value.types.typeList;
                   }

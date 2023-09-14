@@ -11,7 +11,8 @@ class PokemonItem {
       required this.height,
       required this.weight,
       required this.types,
-      required this.pokemonStats});
+      required this.pokemonStats,
+      required this.isFavorite});
 
   int id;
   String name;
@@ -19,6 +20,8 @@ class PokemonItem {
   int weight;
   Types types;
   Stats pokemonStats;
+  bool isFavorite;
+  String imageUrl = "";
 
   factory PokemonItem.fromMap(Map<String, dynamic> map) {
     Types types = Types(typeList: []);
@@ -40,17 +43,24 @@ class PokemonItem {
       });
     }
 
+    print(stats);
+
     return PokemonItem(
         id: map["id"],
         name: map["name"],
         height: map["height"],
         weight: map["weight"],
         types: types,
-        pokemonStats: stats);
+        pokemonStats: stats,
+        isFavorite: map["isFavorite"] == "true" ? true : false);
   }
 
   factory PokemonItem.fromJson(String json) {
     return PokemonItem.fromMap(jsonDecode(json));
+  }
+
+  setIsFavorite(bool value) {
+    isFavorite = value;
   }
 
   @override
